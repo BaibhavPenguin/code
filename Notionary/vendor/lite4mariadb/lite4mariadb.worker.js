@@ -1,0 +1,1 @@
+Couldn't find the requested file /dist/lite4mariadb.worker.js in lite4mariadb.

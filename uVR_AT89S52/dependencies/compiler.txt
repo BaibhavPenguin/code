@@ -1,0 +1,19 @@
+STEP 1 : Install sdcc - Small Device C Compiler
+
+	Debian/Ubuntu : sudo apt install sdcc
+
+	Fedora : sudo dnf install sdcc
+
+	Arch : sudo pacman -S sdcc
+
+	openSUSE : sudo sypper install sdcc
+
+
+STEP 2 : Building From Source.
+
+	sdcc -mcs51 filename.c
+
+
+STEP 3 : Making Binaries
+
+	packixh filename.ihx > filename.hex

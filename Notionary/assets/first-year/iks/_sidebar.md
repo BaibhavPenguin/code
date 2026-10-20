@@ -1,0 +1,6 @@
+* [Indian Knowledge System ](/assets/first-year/iks/iks-ov.md)
+    * [Module 1](/assets/first-year/iks/iks-m1.md)   
+    * [Module 2](/assets/first-year/iks/iks-m2.md)  
+    * [Module 3](/assets/first-year/iks/iks-m3.md)  
+    * [Question Bank (Solved)](/assets/first-year/iks/iks-important.md)
+* [Go Back](/assets/first-year/overview.md)

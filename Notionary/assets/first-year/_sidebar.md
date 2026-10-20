@@ -1,0 +1,13 @@
+* [FY BSc - CS Course Overview]()
+    * [Digital Systems & Architecture](/assets/first-year/dsa/dsa-ov.md)
+    * [Fundamentals of Database Management Systems](/assets/first-year/fdbms/fdbms-ov.md)
+    * [Introduction to Python Programming](/assets/first-year/ipp/ipp-ov.md)
+    * [Statistics with R Programming](/assets/first-year/stat-with-r/rlang-ov.md)
+    * [Computer Science Practical 1]()
+    * [Marketing Mix 1](/assets/first-year/mm1/mm1-ov.md)
+    * [Environmental Management & Sustainable Development](/assets/first-year/emsd/emsd-ov.md)
+    * [Indian Knowledge System](/assets/first-year/iks/iks-ov.md)
+    * [Case Studies in Management](/assets/first-year/csm/csm-ov.md)
+    * [Introduction to Business Communication in English]()
+    
+* [Go Back](/Homepage.md)

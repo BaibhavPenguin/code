@@ -1,0 +1,10 @@
+* [Fundamentals of Database Management Systems](/assets/first-year/fdbms/fdbms-ov.md)
+* [Module 1 ](/assets/first-year/fdbms/fdbms-ov.md)
+    * [Introduction to DBMS](/assets/first-year/fdbms/intro.md)
+    * [Data Models](/assets/first-year/fdbms/dmodel.md)
+    * [ER Model](/assets/first-year/fdbms/ermodel.md)
+    * [DDL Statements](/assets/first-year/fdbms/ddl.md)
+    * [DML Statements](/assets/first-year/fdbms/dml.md)
+
+* [MySQL Command Line Client](/assets/first-year/csp1/mysql.md)
+* [Go Back](/assets/first-year/overview.md)

@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.limitless-hero-wrapper {
+  --banner-base-color: var(
+    --docsify_darklight_textColor,
+    var(--textColor, var(--text-color, currentColor))
+  );
+
+  --c-red: #dc2626;
+  --c-amber: #f59e0b;
+  --c-rose: #f43f5e;
+  --c-darkred: #991b1b;
+
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem 0 3.5rem 0;
+  overflow: visible; 
+  user-select: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .limitless-hero-wrapper {
+    --c-red: #ef4444;
+    --c-amber: #fbbf24;
+    --c-rose: #fb7185;
+    --c-darkred: #b91c1c;
+  }
+}
+:root[data-theme="dark"] .limitless-hero-wrapper,
+body[data-theme="dark"] .limitless-hero-wrapper,
+.dark .limitless-hero-wrapper {
+  --c-red: #ef4444;
+  --c-amber: #fbbf24;
+  --c-rose: #fb7185;
+  --c-darkred: #b91c1c;
+}
+
+.limitless-hero-banner {
+  container-type: inline-size;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: nowrap; 
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2rem, 7cqw, 4.5rem) 0 clamp(2rem, 8cqw, 4rem) 0;
+  overflow: visible; 
+  font-family: 'Anton', Impact, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+
+.limitless-hero-subtitle {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: 'Anton', Impact, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--banner-base-color);
+  opacity: 0.85;
+  font-size: clamp(0.75rem, 2.2vw, 1.35rem);
+  letter-spacing: clamp(0.2em, 1.2vw, 0.45em);
+  padding-left: clamp(0.2em, 1.2vw, 0.45em); 
+  margin-top: clamp(0.75rem, 2vw, 1.5rem);
+  line-height: 1.2;
+}
+
+.limitless-hero-banner .l-char {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex: 0 0 auto;
+  font-size: clamp(3.6rem, 15vw, 6rem);
+  margin: 0 clamp(1.5px, 0.55vw, 4px);
+  transform: scaleY(1.95);
+  transform-origin: 50% 50%;
+  cursor: default;
+
+  background-image: linear-gradient(
+    120deg,
+    var(--banner-base-color) 0%,
+    var(--banner-base-color) 32%,
+    var(--c-red) 32.2%,
+    var(--c-red) 38%,
+    var(--c-rose) 38.2%,
+    var(--c-rose) 44%,
+    var(--c-amber) 44.2%,
+    var(--c-amber) 50%,
+    var(--c-darkred) 50.2%,
+    var(--c-darkred) 68%,
+    var(--banner-base-color) 68.2%,
+    var(--banner-base-color) 100%
+  );
+  background-size: 360% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: 
+    char-paint-sweep 14s cubic-bezier(0.2, 0.8, 0.2, 1) infinite,
+    char-snap-cycle-mobile 14s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+
+  animation-delay: 
+    calc(var(--i) * 0.22s),
+    0s;
+}
+
+@keyframes char-paint-sweep {
+  0%, 5% { background-position: 100% 0; }
+  14%    { background-position: 72% 0; }
+  24%, 75% { background-position: 48% 0; }
+  84%, 100% { background-position: 100% 0; }
+}
+
+@keyframes char-snap-cycle-mobile {
+  0%, 78% { opacity: 1; transform: translateY(0) scaleY(1.95); }
+  81%     { opacity: 0; transform: translateY(35px) scaleY(1.6); }
+  83%     { opacity: 0; transform: translateY(-30px) scaleY(2.1); }
+  86%     { opacity: 1; transform: translateY(2px) scaleY(1.9); }
+  89%, 100% { opacity: 1; transform: translateY(0) scaleY(1.95); }
+}
+
+@media (min-width: 768px) {
+  .limitless-hero-banner {
+    padding: clamp(2.5rem, 5vw, 5rem) 0 clamp(1.5rem, 3vw, 3rem) 0;
+  }
+
+  .limitless-hero-banner .l-char {
+    font-size: clamp(5.2rem, 11.5vw, 15.5rem);
+    margin: 0 clamp(2px, 0.4vw, 8px);
+    transform: scaleY(1.35);
+    animation-name: char-paint-sweep, char-snap-cycle-desktop;
+  }
+
+  @keyframes char-snap-cycle-desktop {
+    0%, 78% { opacity: 1; transform: translateY(0) scaleY(1.35); }
+    81%     { opacity: 0; transform: translateY(40px) scaleY(1.1); }
+    83%     { opacity: 0; transform: translateY(-35px) scaleY(1.45); }
+    86%     { opacity: 1; transform: translateY(2px) scaleY(1.32); }
+    89%, 100% { opacity: 1; transform: translateY(0) scaleY(1.35); }
+  }
+}

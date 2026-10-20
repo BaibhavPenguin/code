@@ -1,0 +1,73 @@
+/* Dynamic Table Styles - Cleaned & Center-Aligned */
+
+.dyntable {
+  width: 100%;
+  max-width: 100%;
+  margin: 2rem auto;
+  text-align: center;
+  background: transparent !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
+}
+
+.dyntable::-webkit-scrollbar {
+  height: 6px;
+}
+
+.dyntable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dyntable::-webkit-scrollbar-thumb {
+  background-color: rgba(150, 150, 150, 0.3);
+  border-radius: 9999px;
+}
+
+.dyntable::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary-accent, #dc2626);
+}
+
+.dyntable table {
+  display: table !important;
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+  background: transparent !important;
+  border-collapse: collapse;
+}
+
+.dyntable th,
+.dyntable td {
+  text-align: center !important;
+  vertical-align: middle !important;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-break: normal;
+  min-width: 80px;
+}
+
+.dyntable figure {
+  margin: 1.5rem auto 0 auto !important;
+  text-align: center !important;
+  background: transparent !important;
+}
+
+.dyntable figcaption {
+  margin-bottom: 0.75rem;
+  text-align: center !important;
+}
+
+@media (max-width: 480px) {
+  .dyntable th,
+  .dyntable td {
+    padding: 0.4rem 0.35rem !important;
+    min-width: 65px;
+    font-size: 0.875rem;
+  }
+}

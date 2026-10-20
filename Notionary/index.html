@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="logo.png">
+  <title>Notionary - The Open Academic Archive</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="My personal notes and educational workspace for Bachelor's of Science in Computer Science">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
+  <link rel="stylesheet" href="./styles/index.css">
+  <link rel="stylesheet" href="./styles/python.css">
+  <link rel="stylesheet" href="./styles/rlang.css">
+  <link rel="stylesheet" href="./styles/mysql.css">
+  <link rel="stylesheet" href="./styles/index.css">
+  <link rel="stylesheet" href="./syyles/homepage.css">
+</head>
+<body>
+  <!-- Reading Progress Indicator -->
+  <div id="scroll-progress-bar"></div>
+
+  <header class="site-header">
+    <div class="site-header-left">
+      <a href="#/" class="header-brand" title="Notionary Home">
+        <img src="logo.png" alt="Notionary Logo" class="header-logo" />
+        <span class="header-title">NOTIONARY</span>
+      </a>
+    </div>
+    <div class="site-header-right" id="header-toggle-slot"></div>
+  </header>
+
+  <div id="app">
+    <div class="app-loader">
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Loading Archive</div>
+    </div>
+  </div>
+
+  <div id="sandbox-modal-backdrop" class="sandbox-modal-backdrop">
+    <div class="sandbox-modal">
+      <div class="sandbox-modal-title" id="sandbox-modal-title">Program Input</div>
+      <div class="sandbox-modal-prompt" id="sandbox-modal-prompt">Enter value:</div>
+      <input type="text" class="sandbox-modal-input" id="sandbox-modal-input" autocomplete="off" />
+      <div class="sandbox-modal-actions">
+        <button class="sandbox-modal-btn cancel" id="sandbox-modal-cancel">Cancel</button>
+        <button class="sandbox-modal-btn submit" id="sandbox-modal-submit">Enter</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function autoExpandSQLEdit(textarea) {
+      if (!textarea) return;
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.min(textarea.scrollHeight, 180) + 'px';
+    }
+
+    function handleSQLKeyDown(e, textarea) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const island = textarea.closest('.mysql-island');
+        const enterBtn = island ? island.querySelector('.mysql-enter-btn') : null;
+        if (enterBtn && !enterBtn.disabled) {
+          enterBtn.click();
+        }
+      }
+    }
+
+    function clearMySQLTerminal(buttonEl) {
+      const island = buttonEl.closest('.mysql-island');
+      if (!island) return;
+      const outputPre = island.querySelector('.mysqlterm pre');
+      if (outputPre) {
+        outputPre.textContent = 'Welcome to the MariaDB monitor. Commands end with ;';
+        outputPre.className = 'mysql-output';
+      }
+    }
+
+    function updateCodeGutter(textarea) {
+      const container = textarea.closest('.code-source') || textarea.closest('.webrsource') || textarea.closest('.pysource');
+      if (!container) return;
+      const gutter = container.querySelector('.code-gutter') || container.querySelector('.webr-gutter') || container.querySelector('.py-line-numbers');
+      if (!gutter) return;
+
+      const lineCount = textarea.value.split('\n').length;
+      let numbers = '';
+      for (let i = 1; i <= lineCount; i++) {
+        numbers += i + '\n';
+      }
+      gutter.textContent = numbers.slice(0, -1);
+    }
+
+    function syncCodeGutterScroll(textarea) {
+      const container = textarea.closest('.code-source') || textarea.closest('.webrsource') || textarea.closest('.pysource');
+      if (!container) return;
+      const gutter = container.querySelector('.code-gutter') || container.querySelector('.webr-gutter') || container.querySelector('.py-line-numbers');
+      if (gutter) {
+        gutter.scrollTop = textarea.scrollTop;
+      }
+    }
+
+    function downloadWebRPlot(buttonEl) {
+      const plotContainer = buttonEl.closest('.webr-plot-container');
+      if (!plotContainer) return;
+      const canvas = plotContainer.querySelector('canvas');
+      if (!canvas) return;
+
+      const link = document.createElement('a');
+      link.download = 'plot.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function requestSandboxInput(promptText, titleText = "Program Input", isR = false) {
+      return new Promise((resolve, reject) => {
+        const backdrop = document.getElementById('sandbox-modal-backdrop');
+        const titleEl = document.getElementById('sandbox-modal-title');
+        const promptEl = document.getElementById('sandbox-modal-prompt');
+        const inputEl = document.getElementById('sandbox-modal-input');
+        const submitBtn = document.getElementById('sandbox-modal-submit');
+        const cancelBtn = document.getElementById('sandbox-modal-cancel');
+
+        titleEl.textContent = titleText;
+        promptEl.textContent = promptText || "Enter input:";
+        inputEl.value = "";
+
+        if (isR) {
+          submitBtn.classList.add('r-btn');
+        } else {
+          submitBtn.classList.remove('r-btn');
+        }
+
+        backdrop.classList.add('active');
+        inputEl.focus();
+
+        function cleanup() {
+          backdrop.classList.remove('active');
+          submitBtn.removeEventListener('click', onDone);
+          cancelBtn.removeEventListener('click', onCancel);
+          inputEl.removeEventListener('keydown', onKey);
+        }
+
+        function onDone() {
+          const val = inputEl.value;
+          cleanup();
+          resolve(val);
+        }
+
+        function onCancel() {
+          cleanup();
+          reject(new Error("Input cancelled by user."));
+        }
+
+        function onKey(e) {
+          if (e.key === 'Enter') onDone();
+          if (e.key === 'Escape') onCancel();
+        }
+
+        submitBtn.addEventListener('click', onDone);
+        cancelBtn.addEventListener('click', onCancel);
+        inputEl.addEventListener('keydown', onKey);
+      });
+    }
+
+    window.$docsify = {
+      name: '',
+      repo: '',
+      homepage: 'Homepage.md',
+      loadSidebar: true,
+      auto2top: true,
+      relativePath: true,
+
+      darklightTheme: {
+        siteFont: 'Arial, Helvetica, sans-serif',
+        defaultTheme: 'light',
+        codeFontFamily: 'Roboto Mono, Monaco, courier, monospace',
+        dark: {
+          accent: '#ef4444',
+          background: '#0f172a',
+          textColor: '#f1f5f9',
+          codeBackgroundColor: '#1e293b'
+        },
+        light: {
+          accent: '#dc2626',
+          background: '#ffffff',
+          textColor: '#1e293b',
+          codeBackgroundColor: '#f8fafc'
+        }
+      },
+
+      plugins: [
+        function(hook) {
+          var footer = [
+            '<footer class="site-footer">',
+            'Made with <span class="heart">❤️</span> by Baibhav Bhattacharya',
+            '</footer>'
+          ].join('');
+
+          hook.afterEach(function(html) {
+            return html + footer;
+          });
+
+          hook.doneEach(function() {
+            var toggleBtn = document.querySelector('.sidebar-toggle');
+            var slot = document.getElementById('header-toggle-slot');
+            if (toggleBtn && slot && !slot.contains(toggleBtn)) {
+              slot.appendChild(toggleBtn);
+            }
+
+            if (window.__isPyodideReady && typeof updatePyodideBadges === 'function') {
+              updatePyodideBadges('ready');
+            }
+            if (window.__isWebRReady && typeof window.updateWebRBadges === 'function') {
+              window.updateWebRBadges('ready');
+            }
+            if (window.__isMySQLReady && typeof window.updateMySQLBadges === 'function') {
+              window.updateMySQLBadges('ready');
+            }
+
+            document.querySelectorAll('.code-source textarea, .webrsource textarea, .pysource textarea').forEach(function(textarea) {
+              updateCodeGutter(textarea);
+            });
+
+            document.querySelectorAll('.mysql-line-edit').forEach(function(el) {
+              autoExpandSQLEdit(el);
+            });
+
+            if (document.querySelector('.py-island, .code-island .py-status-badge') && typeof ensurePyodide === 'function') {
+              ensurePyodide();
+            }
+            if (document.querySelector('.webr-island, .webr-status-badge') && typeof window.ensureWebR === 'function') {
+              window.ensureWebR();
+            }
+            if (document.querySelector('.mysql-island, .mysql-status-badge') && typeof window.ensureMySQL === 'function') {
+              window.ensureMySQL();
+            }
+          });
+        }
+      ]
+    };
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+
+  <!-- Separate Engine Scripts loaded non-blocking -->
+  <script defer src="scripts/python.js"></script>
+  <script type="module" src="scripts/rlang.js"></script>
+  <script type="module" src="scripts/mariadb.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var sidebar = document.querySelector('.sidebar');
+    var content = document.querySelector('.content');
+    if (!sidebar) return;
+
+    sidebar.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+
+    if (content) {
+      content.addEventListener('click', function () {
+        if (window.innerWidth <= 768 && !document.body.classList.contains('close')) {
+          document.body.classList.add('close');
+        }
+      });
+    }
+
+    // Scroll Progress Bar Tracker
+    window.addEventListener('scroll', function () {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      var bar = document.getElementById('scroll-progress-bar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+  });
+  </script>
+</body>
+</html>

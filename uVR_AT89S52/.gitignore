@@ -1,0 +1,24 @@
+#Remove Debug Builds
+debug/
+
+#Remove Extra Compiler outputs
+    
+*.asm
+*.lk
+*.ihx
+*.lst
+*.map
+*.mem
+*.rel
+*.rst
+*.sym
+
+
+hash.out
+opcodes.cpp
+operands.cpp
+opr.out
+temp.txt
+
+#Remove the legacy README
+

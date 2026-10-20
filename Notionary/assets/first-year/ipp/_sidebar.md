@@ -1,0 +1,15 @@
+* [Introduction to Python Programming](/assets/first-year/ipp/ipp-ov.md)
+    * [Basics of Python](/assets/first-year/ipp/ipp-ov.md)
+        * [Area of Circle](/assets/first-year/ipp/area_circ.md)
+        * [Simple Interest](/assets/first-year/ipp/simple_intrest.md)
+    * [If-Else Statements in Python](/assets/first-year/ipp/ipp-ov.md)
+        * [Greater Number](/assets/first-year/ipp/greater_lesser.md)
+        * [Odd Numbers](/assets/first-year/ipp/odd-even.md)
+        * [Grade from SGPA](/assets/first-year/ipp/sgpi-grade.md)
+    * [Loops in Python](/assets/first-year/ipp/ipp-ov.md)
+        * [Fibonacci Series](/assets/first-year/ipp/fibonacci.md)
+        * [Sum of Digits](/assets/first-year/ipp/sod.md)
+        
+
+* [Try it yourself](/assets/first-year/ipp/ipython.md)
+* [Go Back](/assets/first-year/overview.md)

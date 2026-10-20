@@ -1,0 +1,23 @@
+[avrdude]
+
+STEP1 : Install avrdude 
+
+	Debian/Ubuntu/Rasbian : sudo apt install avrdude
+
+	Fedora : sudo dnf install avrdude
+
+	Arch/manjaro : sudno pacman -S avrdude
+
+	OpenSUSE : sudo zupper install avrdude
+
+
+STEP2 : Manage Permissions
+
+	sudo usermod -a -G dialout $USER 
+
+STEP3 : Replace /etc/avrdude.conf with the at89s52.conf given here.
+	Just Copy and Paste , when option for replaacing comes press replace or ok.
+	The modified conf file contains the necessary additions for AT89S51 , AT89S52 and
+	AT89S53 and Some other MCU's which use the modified usbasp programmer.
+
+	Please Check your ISP Programmer

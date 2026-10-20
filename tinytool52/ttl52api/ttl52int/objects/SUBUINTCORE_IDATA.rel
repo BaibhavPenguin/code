@@ -1,0 +1,86 @@
+XH3
+H 1B areas 5 global symbols
+M SUBUINTCORE_IDATA
+O -mmcs51 --model-small
+S .__.ABS. Def000000
+A _CODE size 0 flags 0 addr 0
+A RSEG size 0 flags 8 addr 0
+A RSEG0 size 0 flags 8 addr 0
+A RSEG1 size 0 flags 8 addr 0
+A REG_BANK_0 size 8 flags 4 addr 0
+A DSEG size 0 flags 0 addr 0
+A OSEG size 5 flags 4 addr 0
+S _SUBUINTC_IDATA_PARM_2 Def000000
+S _SUBUINTC_IDATA_PARM_3 Def000001
+S _SUBUINTC_IDATA_PARM_4 Def000002
+A ISEG size 0 flags 0 addr 0
+A IABS size 0 flags 8 addr 0
+A BSEG size 0 flags 80 addr 0
+A PSEG size 0 flags 50 addr 0
+A XSEG size 0 flags 40 addr 0
+A XABS size 0 flags 48 addr 0
+A XISEG size 0 flags 40 addr 0
+A HOME size 0 flags 20 addr 0
+A GSINIT0 size 0 flags 20 addr 0
+A GSINIT1 size 0 flags 20 addr 0
+A GSINIT2 size 0 flags 20 addr 0
+A GSINIT3 size 0 flags 20 addr 0
+A GSINIT4 size 0 flags 20 addr 0
+A GSINIT5 size 0 flags 20 addr 0
+A GSINIT size 0 flags 20 addr 0
+A GSFINAL size 0 flags 20 addr 0
+A CSEG size 50 flags 20 addr 0
+S _SUBUINTC_IDATA Def000000
+A CONST size 0 flags 20 addr 0
+A XINIT size 0 flags 20 addr 0
+A CABS size 0 flags 28 addr 0
+T 00 00 00
+R 00 00 00 02
+T 00 00 00
+R 00 00 00 03
+T 00 00 00
+R 00 00 00 04
+T 00 00 00
+R 00 00 00 06
+T 00 00 00
+R 00 00 00 06
+T 00 00 01
+R 00 00 00 06
+T 00 00 01
+R 00 00 00 06
+T 00 00 02
+R 00 00 00 06
+T 00 00 02
+R 00 00 00 06
+T 00 00 03
+R 00 00 00 06
+T 00 00 03
+R 00 00 00 06
+T 00 00 04
+R 00 00 00 06
+T 00 00 04
+R 00 00 00 06
+T 00 00 00
+R 00 00 00 17
+T 00 00 00 85 82 00 00 03 75 00 00 04 00 7D 00
+R 00 00 00 17 F1 21 05 00 06 F1 21 09 00 06
+T 00 00 08
+R 00 00 00 17
+T 00 00 08 C3 ED 95 00 00 02 50 41 ED 25 00 00 00
+R 00 00 00 17 F1 21 06 00 06 F1 21 0D 00 06
+T 00 00 11 F9 87 04 ED 25 00 00 01 F8 86 03 E5
+R 00 00 00 17 F1 21 08 00 06
+T 00 00 1B 00 00 04 2B D3 9C F4 FC ED 25 00 00 03
+R 00 00 00 17 F1 21 03 00 06 F1 21 0D 00 06
+T 00 00 24 C0 00 F8 A6 04 D0 00 87 04 86 03 7A 00
+R 00 00 00 17
+T 00 00 31 AE 00 00 04 7F 00 EE 2B FB EF 3A FA C3
+R 00 00 00 17 F1 21 04 00 06
+T 00 00 3C EC 9B EF 64 80 8A F0 63 F0 80 95 F0 E4
+R 00 00 00 17
+T 00 00 49 33 F5 00 00 04 0D 80 B9
+R 00 00 00 17 F1 21 05 00 06
+T 00 00 4F
+R 00 00 00 17
+T 00 00 4F 22
+R 00 00 00 17

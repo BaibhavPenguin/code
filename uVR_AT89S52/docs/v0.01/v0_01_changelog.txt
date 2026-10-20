@@ -1,0 +1,279 @@
+uVR - Micro Virtual-R 2026 v0.01 Changelog
+Development Log :  by Baibhav Bhattacharya | https://github.com/BaibhavPenguin
+
+
+
+# Selected memory Map for System : 23-03-2026 : "uvr_variable.h"
+	[Internal RAM Division]
+		[30H - 7FH : Usable Internal Memory]
+
+			[30H - 3FH : Page 1 Variables]
+			[40H - 5FH : Program Buffer]
+			[60H - 7FH : Hardware Stack]
+
+			
+		
+# Decelared Page 1 Variables : 23-03-2026 : "uvr_variable.h"
+
+	loop_counter at 30H		#Storing System wide loop variables
+	
+	prog_counter at 31H     	#Storing the current position of the program buffer
+	
+	rd_pointer at 32H       	#Read Pointer to read from  the program buffer
+	
+	wr_pointer at 33H       	#Write Buffer to modify the program buffer
+	
+	system_tick at 34H		#To Store System Time (Master Tick)
+	
+	op1 at 35H			#Store one of the operands
+	
+	op2 at 36H 			#Store another operand
+	
+	active_timer at 37H		#Store timer data for generating delays (system_tick - active_timer)
+
+	instruction_buffer at 3DH 	#To Store Current Script Instruction
+	
+	result_l at 3EH			#To Store Lower Byte of Result
+	
+	result_h at 3FH			#To Store Higher Byte of Result
+
+#Decelared temp variables : 23-03-2026 : "uvr_variable.h"
+
+	temp0 at 38H
+	temp1 at 39H
+	temp2 at 3AH
+	temp3 at 3BH
+
+#Deceleared Program Buffer : 23-03-2026 : "uvr_variable.h"
+
+	prog_buffer from 40H 
+		[32 byte buffer from 40H to 5FH]
+
+
+
+
+#Defined Supported Command Set (Temporary) : 23-03-2026 : "uvr_rom.h"
+
+
+	'+'		#Add Numbers 		#Defined As "sADD"
+	
+	'-'		#Subtract Numbers 	#Defined as "sSUB"
+	
+	'*'		#Multiply Numbers	#Defined as "sMUL"
+
+	'/'		#Divide Numbers 	#Defined as "sDIV"
+
+	'O'		#Output A Byte 		#Defined as "sOUT"
+
+	'#'		#Loop Outputs 		#Defined as "sLPP"
+
+	'R'		#Software Reset		#Defined as "sRES"
+
+	'T'		#Set Timer Delay	#Defined as "sTICK"
+
+	'?'		#Execute Script 	#Defined as "sEXEC"
+
+	
+
+#Decelared ROM Constants : 23-03-2026 : "uvr_rom.h"
+
+	read_buffer = 40H		#Points to start of buffer 	!Redundant
+	write_buffer = 40H		#Points to start of buffer	!Redundant
+	
+	exec_ptr	= 40H		#Points to start of buffer 
+
+	hw_stack = 60H 			#Stores starting address of Hardware Stack
+
+	[timer_h timer_l] = 4BFEH 	#Two variables for 50ms Master Tick on AT89S52
+
+
+#Dcelared Hardware Initializers : 23-03-2026 : "driver52.h"
+
+	init_mpu() 		#Initialise Page 1 Variables and Registers
+	
+	init_timer()		#Initialise Hardware Timers for Master Tick
+	
+	init_serial()		#Initiaslize Serial Registers for I/O
+
+	get_char()		#Read Serial Input
+
+	put_char()		#Write Serial Output
+
+	start_timer()		#Start Timer 	!Unnecessary!Will be Changed Later
+
+	ascii_to_hex()		#Convert to HEX from Input
+
+	hex_to_ascii() 		#Convert to ASCII for output
+
+	print_boot_message() 	#Print Initialization Message on Serial Terminal
+
+
+
+#Major Changes : 25-03-2026
+	
+	uvr_rom.h ---> uvr_const.h 
+		
+		#Using "#define" for rom constants due to sdcc issues
+		#discarded "driver52.c" as sdcc does not support multiple sources for mcs51
+		#Adapted New Project Structure
+
+#Build System Changes 25-03-2026
+	
+	#Discarded Makefile.
+	#Using build.sh for building (d) Debug Build , (b) Built Binaries , (r) Release
+	#Completely Automated Build ---> Organize ---> Flash process
+	#Complete Redesign of functions.
+
+#Code Changes : 25-03-2025
+	
+	The Serial Communication failed catastrophically due to Timer 2 quirks and stack corruption.
+	#Redesign of Timer Roles.
+	
+	#timer 1 : Exclusively for baud generation at 9600
+	
+	#timer 2 : 16 Bit Autoreload , Generates master tick.
+	
+	#Added "serial_busy" at 0x38.
+	
+	#Replaced serial_busy with "is_recieved" flag
+	
+	#Added Local Version Control
+
+
+	
+#Version Control Format : 25-03-2025
+	
+	#vx.xx.ms.s.m
+		#Timed Versions _debug , _build , _release
+		#Added build.conf for source control
+
+
+#Added HAL v0.01 PART 1 , : ios.h : 27-03-2026
+	
+	#uart_send and SerialInput ISR now wrapped for logical data outputs
+	#Added echo function
+	#Added clear_terminal function
+	#Enter Key (CR) was dealt within the echo() function
+	#Moved high level function in HAL part header namely ios.h
+	#Groundwork done for 'c' command : clear screen 
+	#Considering support for 'r' command : restart
+	
+	#Removed declarations with "Redundant" flags
+	#buffer system now is simplified to "&prog_buffer[0]";
+	
+#IMPORTANT!!!!!! : 28-03-2026
+	#Complete Redesign of the Command Architecture.
+
+	#New Supported Commands
+
+	"add" data1,data2
+	"sub" data1,data2
+	"mul" data1,data2
+	"div" data1,data2
+	"and" data,data2
+	"or" data1,data2
+	"not" data
+	"xor" data1,data2
+	"--o"  data , port
+	"--i" data,port
+	"ext"
+	"--c" data
+	"--r"
+	"del" data
+	"cls"
+	"tog" data,port,iteration
+	"--f" (tr or fr)
+
+#Added Parser and Complete ByteCode execution sysrem 28-03-2026
+
+	hash key = 00111111 (0x3F)
+	Hashing Alhgorithm.
+	The three bytes are byte1 , byte2 , byte3 respectively.
+	instruction = byte1 XOR (byte2 AND hash key)
+	instruction = instruction >> 1
+	instruction = instruction ^ byte3
+
+#Fixed Buffer Overflow and Buffer Underflow issues 28-03-2026
+
+#Groundwork laid for execution sequence and scheduler.
+
+#Fixed Buffer Overflow Issues in Both I/O and Execution : main.c : 03-04-2026
+
+#Fixed several bugs related to the scheduler and parser : main.c : 03-04-2026
+
+	#Scheduler bug for prevention of subsequent command execution after the initial command was fixed
+	#Buffer Overflow bug due to desync of Prog Counter and rd_pointer was fixed
+	#Fixed Buffer overflow due to infinesimal increase of program counter
+	#Fixed execition of previous comands ie buffer corruption issues
+
+#Added Support for --r : Runtime Reset Command : 03-04-2026
+	#Using WTDRST for runtime reset
+	#Added Print wait message function for UX convinience
+	#--r uses 0x1E and 0xE1 as an actication sequence for WTDRST at 0xA6
+	#changed definition of WDTRST from __sbit to __sfr __at
+	
+#Added support for cls : command.h : 03-04-2026
+	#Uses ios library function "clear_terminal()"
+	
+	
+##MAJOR CHANGE##  - Changed cls to clr : 03-04-2026
+	#clr causes collision with not hence it was cj=hanged to clr
+
+
+#Fixed all backspace issues : main.c : 06-04-2026
+
+	#Expaneded Serial ISR for checking Control + ? (Decimal 127)
+	#Set Delete Characrer (Decimal 127) as System wide Backspace Key
+	#Added echo_e (Echo Erase Flag) for handling transfer of backspace sequence 
+	#Added core logic for handling Buffer Overflow and Underflow
+	#Backspace now just overwrites the last character as it should
+
+#Changed Underlying logic of "clr" and added "-cl" : main.c : ios.h 
+
+	#"clr" logic changed from Reset terminal to "ESC + [ + 2 + J + ESC + [ + H"
+	#Changed underlying logic of ios function clear_terminal()
+	#Added terminal_reset() ios function 
+	#Added command "-cl" for Commahd Line Reset
+
+	Command Line Reselt "-cl" doesn't preserve any color settings or terminal configurations
+	Clear Screen just uses the ASCII Clear Screen Sequence to Clear printed characters and move
+	cursor back to HOME (Control + H).
+
+	##Planning to add the tog command and publish release v0.01 before 12-04-2026##
+
+#Added --f command and its respective message : main.c : 10-04-2026
+
+#Moved the decimal operand parser in a new function called parse_numeric_operand_single() : main.c : 10-04-2026
+
+#Reuse and Expand the infirmation provided by is_error: main.c : 10-04-2026:
+
+#Added a 5 byte buffer for storing the results ie an output buffer: main.c : 10-04-2026
+
+#Added add command with support for continuous adding upto 65535 (base10) : main.c : 10-04-2026
+
+#Replaced "del" command with "buf" command to view the result of the previous arithmetic or logical command : main.c : 10-04-2026
+
+#Changed release v0.01 goals to include all the arithmetic commands.
+	#v0.02 to include --i and --o
+	#v0.03 to include all logical commands and the tog command
+	#v0.04 to fix random bugs and quirks
+
+#Later versions will be a subset of v0.04 as expansion is vertical. Commands may be added later however the possibility seems low
+
+#Added sub command : main.c : command.h ; 12-04-2026
+
+#Added div command : main.c : command.h ; 12-04-2026
+
+#Added mul command : main.c : command.h ; 12-04-2026
+
+#Added mod command : main.c : command.h ; 12-04-2026
+
+#Added user data variable : main.c : uvr_variable.h : 12-04-2026
+	#Added user data variable "unsigned char temp4"
+	It is directly accessible by dto,dts,dtg,din,dmv,dmr
+	It can also be accessed via tog,sleep and future commands
+
+#Removed groundwork for "ext" command.
+	An ext command was planned as a sleep but it was removed because it is unnecsaary for
+	AT89S52 based Micro Virtual-R , it may be added in revisions for other platforms.
+
