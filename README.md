@@ -14,5 +14,5 @@ These projects have been developed by **Baibhav Bhattacharya** for personal use 
 - [Bypasswd Generator](Pypasswd%Generator%(Archive)/Passwor%Strength%Analyzer/README.md)
 - [Notionary](/Notionary/README.md)
 
-**And many more...**
+**And many more...**  
 View the file tree to access these projects.
