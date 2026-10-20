@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bsim85 - 8085 Microprocessor Environment</title>
+  <link rel="stylesheet" href="./styles/index.css">
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="badge">bsim85</span>
+    </div>
+    <nav class="header-links">
+      <a href="#licenses" class="nav-link">Licenses</a>
+      <a href="https://github.com" target="_blank" rel="noreferrer" class="nav-link">GitHub</a>
+    </nav>
+  </header>
+
+  <!-- Execution Toolbar -->
+  <section class="toolbar">
+    <div class="toolbar-title" id="toolbar-mode-indicator">Assembly Editor</div>
+    <div class="toolbar-actions">
+      <button id="btn-reset" class="btn btn-warning" title="Reset CPU Registers & Peripherals">
+        <svg viewBox="0 0 24 24" class="btn-icon"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset CPU
+      </button>
+      <button id="btn-assemble" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" class="btn-icon"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-4.3 4.3H10v-2l4.3-4.3a1 1 0 0 0 0-1.4l-1.4-1.4a1 1 0 0 0-1.4 0L3 13.1V21h7.9l8.6-8.6a1 1 0 0 0 0-1.4l-4.8-4.7z"/></svg>
+        Assemble
+      </button>
+      <button id="btn-step" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" class="btn-icon"><path d="M6 4v16l10-8L6 4zm12 0h2v16h-2V4z"/></svg>
+        Step
+      </button>
+      <button id="btn-run" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" class="btn-icon"><path d="M8 5v14l11-7z"/></svg>
+        Run
+      </button>
+    </div>
+  </section>
+
+  <!-- Workspace Shell -->
+  <div class="workspace">
+    <!-- Slim Activity Rail -->
+    <aside class="activity-bar">
+      <button class="rail-btn active" id="btn-view-registers" title="Registers & State">
+        <svg viewBox="0 0 24 24" class="rail-icon">
+          <path d="M4 3h16c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2zm0 4h16V5H4v2zm0 4h16V9H4v2zm0 4h16v-2H4v2zm0 4h16v-2H4v2z"/>
+        </svg>
+      </button>
+
+      <button class="rail-btn" id="btn-view-memory" title="Memory Inspector">
+        <svg viewBox="0 0 24 24" class="rail-icon">
+          <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 12h8v2H8v-2zm0 4h8v2H8v-2z"/>
+        </svg>
+      </button>
+
+      <button class="rail-btn" id="btn-view-io" title="I/O Ports">
+        <svg viewBox="0 0 24 24" class="rail-icon">
+          <path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/>
+        </svg>
+      </button>
+
+      <button class="rail-btn" id="btn-stage-terminal" title="Toggle Terminal">
+        <svg viewBox="0 0 24 24" class="rail-icon">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zm-12-3l3.5-3.5L8 8l1.4-1.4 4.9 4.9-4.9 4.9L8 15zm5 0h5v2h-5v-2z"/>
+        </svg>
+      </button>
+
+      <div class="rail-spacer"></div>
+
+      <!-- Theme Switcher -->
+      <button class="rail-btn theme-toggle-btn" id="btn-theme-toggle" title="Toggle Light / Dark Theme">
+        <svg viewBox="0 0 24 24" class="rail-icon icon-sun">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0 0-1.41l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" class="rail-icon icon-moon">
+          <path d="M12.3 2a10 10 0 0 0-.19 2 10 10 0 0 0 10 10c.7 0 1.38-.07 2.03-.2A10.03 10.03 0 0 1 12 22 10 10 0 0 1 2 12a10 10 0 0 1 10.3-10z"/>
+        </svg>
+      </button>
+    </aside>
+
+    <!-- Inspection Drawer -->
+    <div class="panel-stage">
+      <section id="panel-registers" class="drawer-view active">
+        <div class="panel-header">Processor State</div>
+        <div class="panel-content">
+          <div class="data-group">
+            <span class="field-title">Accumulator (A)</span>
+            <div class="register-tile">
+              <span class="reg-name">A</span>
+              <strong class="reg-val" id="reg-a">--</strong>
+            </div>
+          </div>
+
+          <div class="data-group">
+            <span class="field-title">General Purpose REGISTERS</span>
+            <div class="reg-pair-box">
+              <div class="reg-pair-header">
+                <span>BC PAIR</span>
+                <span class="reg-pair-combined" id="pair-bc">----</span>
+              </div>
+              <div class="reg-pair-split">
+                <div class="reg-cell"><span>B</span><strong id="reg-b">--</strong></div>
+                <div class="reg-cell"><span>C</span><strong id="reg-c">--</strong></div>
+              </div>
+            </div>
+
+            <div class="reg-pair-box">
+              <div class="reg-pair-header">
+                <span>DE PAIR</span>
+                <span class="reg-pair-combined" id="pair-de">----</span>
+              </div>
+              <div class="reg-pair-split">
+                <div class="reg-cell"><span>D</span><strong id="reg-d">--</strong></div>
+                <div class="reg-cell"><span>E</span><strong id="reg-e">--</strong></div>
+              </div>
+            </div>
+
+            <div class="reg-pair-box">
+              <div class="reg-pair-header">
+                <span>HL Pair</span>
+                <span class="reg-pair-combined" id="pair-hl">----</span>
+              </div>
+              <div class="reg-pair-split">
+                <div class="reg-cell"><span>H</span><strong id="reg-h">--</strong></div>
+                <div class="reg-cell"><span>L</span><strong id="reg-l">--</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="data-group">
+            <span class="field-title">FLAGS</span>
+            <div class="flags-card">
+              <div class="flags-led-strip">
+                <div class="flag-indicator" id="flag-s"><span class="led"></span><span class="flag-lbl">S</span></div>
+                <div class="flag-indicator" id="flag-z"><span class="led"></span><span class="flag-lbl">Z</span></div>
+                <div class="flag-indicator" id="flag-ac"><span class="led"></span><span class="flag-lbl">AC</span></div>
+                <div class="flag-indicator" id="flag-p"><span class="led"></span><span class="flag-lbl">P</span></div>
+                <div class="flag-indicator" id="flag-cy"><span class="led"></span><span class="flag-lbl">CY</span></div>
+              </div>
+              <div class="flags-hex-wrap">
+                <span class="hex-tag">PSW:</span>
+                <span class="flags-hex" id="reg-flags-hex">--</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="data-group">
+            <span class="field-title">Control Registers</span>
+            <div class="data-row"><span><b>PC (Program Counter)</b></span><strong id="reg-pc">----</strong></div>
+            <div class="data-row"><span><b>SP (Stack Pointer)</b></span><strong id="reg-sp">----</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-memory" class="drawer-view">
+        <div class="panel-header">Memory Inspector</div>
+        <div class="panel-content">
+          <div class="data-group">
+            <span class="field-title">Base Address</span>
+            <input type="text" class="input-ctrl" id="mem-base-input" placeholder="e.g. 0800">
+          </div>
+          <div class="memory-grid" id="memory-cells"></div>
+        </div>
+      </section>
+
+      <section id="panel-io" class="drawer-view">
+        <div class="panel-header">I/O Ports</div>
+        <div class="panel-content">
+          <div class="data-group">
+            <span class="field-title">Active Ports</span>
+            <div class="io-list" id="io-table-body"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Center Stage Area -->
+    <main class="stage-container">
+      <div id="stage-editor" class="stage-view active">
+        <div class="line-gutter" id="gutter"></div>
+        <div class="editor-wrap">
+          <pre id="highlight-layer" aria-hidden="true"><code id="highlight-code"></code></pre>
+          <textarea id="code-area" spellcheck="false" placeholder="; Write 8085 Assembly here..."></textarea>
+        </div>
+      </div>
+
+      <!-- System Terminal -->
+      <div id="stage-terminal" class="stage-view">
+        <div class="terminal-shell">
+          <div class="terminal-output" id="terminal-out"></div>
+          <div class="terminal-prompt-box">
+            <span class="prompt-symbol">bsim85&gt;</span>
+            <input type="text" id="terminal-input" placeholder="" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right Hardware Panel -->
+    <aside class="hardware-panel" id="hardware-panel">
+      <button class="panel-toggle-tab" id="hw-toggle-btn" title="Toggle Hardware Panel">
+        <svg viewBox="0 0 24 24" class="toggle-icon">
+          <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+        </svg>
+      </button>
+
+      <div class="hw-panel-inner">
+        <div class="panel-header">
+          <span>Hardware Workbench</span>
+        </div>
+
+        <div class="hw-panel-content">
+          <!-- 3-Byte 7-Segment LED Display (6 Digits) without Port Text -->
+          <div class="hw-section">
+            <div class="hw-sub-title">LED Display</div>
+            <div class="seg16-bezel">
+              <div class="seg-display-glass">
+                <!-- Address / High Field: Digits 5, 4, 3, 2 -->
+                <svg class="seven-seg" id="seg-digit-5" viewBox="0 0 50 80">
+                  <polygon class="seg seg-a" points="10,6 14,2 36,2 40,6 36,10 14,10"/>
+                  <polygon class="seg seg-b" points="40,8 44,12 44,36 40,40 36,36 36,12"/>
+                  <polygon class="seg seg-c" points="40,42 44,46 44,70 40,74 36,70 36,46"/>
+                  <polygon class="seg seg-d" points="10,74 14,70 36,70 40,74 36,78 14,78"/>
+                  <polygon class="seg seg-e" points="10,42 14,46 14,70 10,74 6,70 6,46"/>
+                  <polygon class="seg seg-f" points="10,8 14,12 14,36 10,40 6,36 6,12"/>
+                  <polygon class="seg seg-g" points="10,40 14,36 36,36 40,40 36,44 14,44"/>
+                </svg>
+                <svg class="seven-seg" id="seg-digit-4" viewBox="0 0 50 80">
+                  <polygon class="seg seg-a" points="10,6 14,2 36,2 40,6 36,10 14,10"/>
+                  <polygon class="seg seg-b" points="40,8 44,12 44,36 40,40 36,36 36,12"/>
+                  <polygon class="seg seg-c" points="40,42 44,46 44,70 40,74 36,70 36,46"/>
+                  <polygon class="seg seg-d" points="10,74 14,70 36,70 40,74 36,78 14,78"/>
+                  <polygon class="seg seg-e" points="10,42 14,46 14,70 10,74 6,70 6,46"/>
+                  <polygon class="seg seg-f" points="10,8 14,12 14,36 10,40 6,36 6,12"/>
+                  <polygon class="seg seg-g" points="10,40 14,36 36,36 40,40 36,44 14,44"/>
+                </svg>
+                <svg class="seven-seg" id="seg-digit-3" viewBox="0 0 50 80">
+                  <polygon class="seg seg-a" points="10,6 14,2 36,2 40,6 36,10 14,10"/>
+                  <polygon class="seg seg-b" points="40,8 44,12 44,36 40,40 36,36 36,12"/>
+                  <polygon class="seg seg-c" points="40,42 44,46 44,70 40,74 36,70 36,46"/>
+                  <polygon class="seg seg-d" points="10,74 14,70 36,70 40,74 36,78 14,78"/>
+                  <polygon class="seg seg-e" points="10,42 14,46 14,70 10,74 6,70 6,46"/>
+                  <polygon class="seg seg-f" points="10,8 14,12 14,36 10,40 6,36 6,12"/>
+                  <polygon class="seg seg-g" points="10,40 14,36 36,36 40,40 36,44 14,44"/>
+                </svg>
+                <svg class="seven-seg" id="seg-digit-2" viewBox="0 0 50 80">
+                  <polygon class="seg seg-a" points="10,6 14,2 36,2 40,6 36,10 14,10"/>
+                  <polygon class="seg seg-b" points="40,8 44,12 44,36 40,40 36,36 36,12"/>
+                  <polygon class="seg seg-c" points="40,42 44,46 44,70 40,74 36,70 36,46"/>
+                  <polygon class="seg seg-d" points="10,74 14,70 36,70 40,74 36,78 14,78"/>
+                  <polygon class="seg seg-e" points="10,42 14,46 14,70 10,74 6,70 6,46"/>
+                  <polygon class="seg seg-f" points="10,8 14,12 14,36 10,40 6,36 6,12"/>
+                  <polygon class="seg seg-g" points="10,40 14,36 36,36 40,40 36,44 14,44"/>
+                </svg>
+
+                <div class="seg-colon">:</div>
+
+                <!-- Data / Low Field: Digits 1, 0 -->
+                <svg class="seven-seg" id="seg-digit-1" viewBox="0 0 50 80">
+                  <polygon class="seg seg-a" points="10,6 14,2 36,2 40,6 36,10 14,10"/>
+                  <polygon class="seg seg-b" points="40,8 44,12 44,36 40,40 36,36 36,12"/>
+                  <polygon class="seg seg-c" points="40,42 44,46 44,70 40,74 36,70 36,46"/>
+                  <polygon class="seg seg-d" points="10,74 14,70 36,70 40,74 36,78 14,78"/>
+                  <polygon class="seg seg-e" points="10,42 14,46 14,70 10,74 6,70 6,46"/>
+                  <polygon class="seg seg-f" points="10,8 14,12 14,36 10,40 6,36 6,12"/>
+                  <polygon class="seg seg-g" points="10,40 14,36 36,36 40,40 36,44 14,44"/>
+                </svg>
+                <svg class="seven-seg" id="seg-digit-0" viewBox="0 0 50 80">
+                  <polygon class="seg seg-a" points="10,6 14,2 36,2 40,6 36,10 14,10"/>
+                  <polygon class="seg seg-b" points="40,8 44,12 44,36 40,40 36,36 36,12"/>
+                  <polygon class="seg seg-c" points="40,42 44,46 44,70 40,74 36,70 36,46"/>
+                  <polygon class="seg seg-d" points="10,74 14,70 36,70 40,74 36,78 14,78"/>
+                  <polygon class="seg seg-e" points="10,42 14,46 14,70 10,74 6,70 6,46"/>
+                  <polygon class="seg seg-f" points="10,8 14,12 14,36 10,40 6,36 6,12"/>
+                  <polygon class="seg seg-g" points="10,40 14,36 36,36 40,40 36,44 14,44"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logic LED Arrays (Ports 00H-0FH) -->
+          <div class="hw-section">
+            <div class="hw-sub-title">LED ARRAY</div>
+            <div class="all-ports-scroll" id="all-ports-container"></div>
+          </div>
+
+          <!-- Hex Keypad -->
+          <div class="hw-section">
+            <div class="hw-sub-title">INTERACTIVE HEX KEYPAD</div>
+            <div class="hex-keypad">
+              <button class="keypad-btn" data-key="C">C</button>
+              <button class="keypad-btn" data-key="D">D</button>
+              <button class="keypad-btn" data-key="E">E</button>
+              <button class="keypad-btn" data-key="F">F</button>
+
+              <button class="keypad-btn" data-key="8">8</button>
+              <button class="keypad-btn" data-key="9">9</button>
+              <button class="keypad-btn" data-key="A">A</button>
+              <button class="keypad-btn" data-key="B">B</button>
+
+              <button class="keypad-btn" data-key="4">4</button>
+              <button class="keypad-btn" data-key="5">5</button>
+              <button class="keypad-btn" data-key="6">6</button>
+              <button class="keypad-btn" data-key="7">7</button>
+
+              <button class="keypad-btn" data-key="0">0</button>
+              <button class="keypad-btn" data-key="1">1</button>
+              <button class="keypad-btn" data-key="2">2</button>
+              <button class="keypad-btn" data-key="3">3</button>
+
+              <button class="keypad-btn util-btn" data-key="GO">GO</button>
+              <button class="keypad-btn util-btn" data-key="EXEC">EXEC</button>
+              <button class="keypad-btn util-btn" data-key="INC">INC</button>
+              <button class="keypad-btn util-btn" data-key="DEC">DEC</button>
+
+              <button class="keypad-btn util-btn reset-btn" data-key="RST">RST</button>
+              <button class="keypad-btn util-btn" data-key="TRAP">TRAP</button>
+              <button class="keypad-btn util-btn" data-key="REG">REG</button>
+              <button class="keypad-btn util-btn" data-key="STEP">STEP</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="app-footer">
+    <span class="footer-copy">bsim85 &mdash; By Baibhav Bhattacharya</span>
+  </footer>
+
+  <script src="./scripts/bridge.js"></script>
+  <script src="./scripts/index.js"></script>
+</body>
+</html>

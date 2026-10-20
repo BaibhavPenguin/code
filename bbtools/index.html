@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>bbtools</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="bbtools Documentation and Knowledge Base" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+
+  <!-- Docsify Themeable Clean Light Base -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="./styles/index.css" />
+</head>
+<body>
+
+  <!-- Floating Header -->
+  <header class="custom-header">
+    <div class="header-container">
+      <div class="header-brand">
+        <span class="brand-badge">bbtools</span>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="header-nav" aria-label="Main Navigation">
+        <a href="#/tools" class="nav-link">Tools</a>
+        <a href="#/about" class="nav-link">About me</a>
+        <a href="#/support" class="nav-link">Support</a>
+        <a href="#/NOTICE" class="nav-link">Notice</a>
+        <a href="#/LICENSE" class="nav-link">Licenses</a>
+      </nav>
+
+      <!-- Sidebar Toggle -->
+      <div class="header-actions">
+        <button id="custom-sidebar-toggle" class="sidebar-toggle-btn" type="button" aria-label="Toggle Sidebar" title="Toggle Sidebar">
+          <svg class="toggle-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Backdrop Overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
+
+  <!-- Docsify Target Element with Dynamic Green Spinner -->
+  <div id="app">
+    <div class="loading-container">
+      <div class="spinner-ring"></div>
+    </div>
+  </div>
+
+  <!-- Custom Footer -->
+  <footer class="custom-footer">
+    <div class="footer-container">
+      <span>&copy; <span id="current-year"></span> bbtools. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- Docsify Window Configuration -->
+  <script>
+    window.$docsify = {
+      name: 'bbtools',
+      loadSidebar: true,
+      subMaxLevel: 3,
+      auto2top: true,
+      themeColor: '#059669',
+      routerMode: 'hash'
+    };
+  </script>
+
+  <!-- Core Docsify and Themeable -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0"></script>
+
+  <!-- Global Controller Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var yearEl = document.getElementById('current-year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // Sidebar button toggle
+      document.addEventListener('click', function (e) {
+        var toggleBtn = e.target.closest('#custom-sidebar-toggle');
+        var overlay = e.target.closest('#sidebar-overlay');
+
+        if (toggleBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          document.body.classList.toggle('sidebar-closed');
+        }
+
+        // Tap backdrop to close on mobile
+        if (overlay) {
+          document.body.classList.add('sidebar-closed');
+        }
+
+        // Auto close on mobile when clicking sidebar links
+        if (window.innerWidth <= 768 && e.target.closest('.sidebar a')) {
+          document.body.classList.add('sidebar-closed');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

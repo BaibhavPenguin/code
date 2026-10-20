@@ -1,0 +1,16 @@
+TID            	Team Name
+--------------------------------------------------
+LRIH-01        	ScrapNex
+LRIH-02        	Infintyx
+LRIH-03        	CodeNova
+LRIH-04        	Mumbaivey
+LRIH-05        	Bharat Roots
+LRIH-06        	Debuggers
+LRIH-07        	Mindpilot
+LRIH-08        	Git Happens
+LRIH-09        	Freakuency
+LRIH-10        	Alpha Innovators
+LRIH-11        	Byte Club
+LRIH-12        	visionX
+LRIH-13        	HERTZ
+LRIH-14        	CLUSTRA

@@ -1,0 +1,10 @@
+UNIX_NEWLINE = r'\n'
+WIN32_NEWLINE = r'\r\n'
+IDENTIFIER = '$'
+KEYWORD = ':'
+DIRECTIVE = '.'
+LABEL = '#'
+COMMENTS = '//'
+ASSIGN = '='
+
+

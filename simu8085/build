@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "BuildScript: Add version prefix? :"
+read -r version
+mkdir -p bin
+g++ *.c *.cc  $(pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.1) -lstdc++ -o "bin/bsim85-${version}"
+echo "BuildScript: Created binary at ${PWD}/bin/bsim85-${version}"
